@@ -1,3 +1,56 @@
+<#
+    .SYNOPSIS
+        Downloads DMARC RUA reports sent to an Outlook mailbox.
+
+    .DESCRIPTION
+        The Start-DmarcRuaMailboxScrape function is used to scrape all DMARC RUA reports attached to emails that have been sent to an Outlook mailbox.
+        High level actions are as follows:
+            1) Connect to the Outlook mailbox(s) specified in the DMARC RUA report database or -DisplayName parameter.
+            2) Enumerate through each email in the Outlook folder specified in the -SourceFolder parameter.
+            3) If the email contains an attachment, confirm it matches a valid DMARC RUA report file extension (.7z .gz .rar .tar .x .zip).
+            4) If the attachment does have a valid file extension then download it to a temporary 'MailboxScrape' folder in the DMARC RUA report database.
+            5) Move the successfully processed email to the Outlook folder specified in the -DestinationFolder parameter.
+            6) Any unprocssed emails are left in the source folder for the user to manually resolve.
+
+        This function will sometimes fail to process one or more emails.
+        Here are some tips to follow if this occurs:
+            - Review the email and see if it contains an attachment.
+              If it does, download the attachment and unzip its contents into the 'ImportData' directory.
+              Chances are, the unzipped files don't have an '.xml' extension but are otherwise ok.
+              Just rename all these files with an '.xml' extension and so long as the file is in the 'ImportData' directory, it will get picked up later on by the Update-DmarcRuaReportDatabase function.
+
+            - Delete any spam emails in the Inbox folder or move them to another Outlook folder.
+              If you don't do this, the function will display an error message each time it tries to process them.
+
+            - If the function is failing on a large number of emails, it's recommend that you blow away your entire cached Outlook profile and re-download everything from scratch from Exchange Online.
+    
+    .PARAMETER Path
+        Specifies the directory root path to the DMARC RUA Report Database.
+        Defaults to . (the current location).
+
+    .PARAMETER DisplayName
+        An optional Display Name filter that can be specified when searching for mailbox scrape sources.
+        Defaults to whatever is specified in the config.json file.
+
+    .PARAMETER SourceFolder
+        Specifies the source Outlook folder to scrape.
+        Defaults to the 'Inbox' folder.
+
+    .PARAMETER DestinationFolder
+        Specifies the destination Outlook folder to move emails to once they have been processed.
+        Defaults a custom mailbox root folder called '_DmarcProcessed'.
+
+        Note: This parameter doesn't support specifying a subfolder (e.g. Inbox/_DmarcProcessed).
+
+    .PARAMETER ProcessingLimit
+        The maximum number of emails in Outlook to process in a single execution of this function.
+        Defaults to 5000 and was introduced because Outlook tended to crash at anything higher than this on my 4 x CPU core, 8GB memory laptop.
+
+    .EXAMPLE
+        Start-DmarcRuaMailboxScrape
+
+        Starts downloading all DMARC aggregate reports from the mailbox(s) specified by the DMARC RUA report database in the current path.
+#>
 Function Start-DmarcRuaMailboxScrape {
     [CmdletBinding()]
     Param (
