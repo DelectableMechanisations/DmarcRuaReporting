@@ -13,9 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-DmarcRuaReportDatabase [[-Name] <String>] [[-Path] <String>] [-Force]
- [[-OutlookMailboxesToScrape] <String[]>] [[-7zipExecutablePath] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+New-DmarcRuaReportDatabase [[-Name] <String>] [[-OutlookMailboxesToScrape] <String[]>] [[-Path] <String>]
+ [-Force] [[-7zipExecutablePath] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,36 +31,6 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -7zipExecutablePath
-{{ Fill 7zipExecutablePath Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-{{ Fill Force Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
 {{ Fill Name Description }}
 
@@ -71,7 +40,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,7 +70,37 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+{{ Fill Force Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -7zipExecutablePath
+{{ Fill 7zipExecutablePath Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

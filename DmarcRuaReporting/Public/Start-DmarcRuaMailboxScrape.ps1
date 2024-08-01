@@ -23,7 +23,7 @@
               If you don't do this, the function will display an error message each time it tries to process them.
 
             - If the function is failing on a large number of emails, it's recommend that you blow away your entire cached Outlook profile and re-download everything from scratch from Exchange Online.
-    
+
     .PARAMETER Path
         Specifies the directory root path to the DMARC RUA Report Database.
         Defaults to . (the current location).

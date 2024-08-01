@@ -32,8 +32,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DestinationFolder
-{{ Fill DestinationFolder Description }}
+### -Path
+{{ Fill Path Description }}
 
 ```yaml
 Type: String
@@ -41,7 +41,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -56,37 +56,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Path
-{{ Fill Path Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProcessingLimit
-{{ Fill ProcessingLimit Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,7 +71,37 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DestinationFolder
+{{ Fill DestinationFolder Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProcessingLimit
+{{ Fill ProcessingLimit Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
