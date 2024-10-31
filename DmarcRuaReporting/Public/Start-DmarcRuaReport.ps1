@@ -1,3 +1,69 @@
+<#
+    .SYNOPSIS
+        Generates a CSV based report using information stored in the DMARC Report Database.
+
+    .DESCRIPTION
+        The Start-DmarcRuaReport function is used to create human readable reports from the data stored in the DMARC database.
+        These reports use the CSV format and are intended to be reviewed within a spreadsheet viewer like Microsoft Excel.
+
+    .PARAMETER Path
+        Specifies the directory root path to the DMARC RUA Report Database.
+        Defaults to . (the current location).
+
+    .PARAMETER ReportType
+        Specifies the type of report to generate.
+        The acceptable values for this parameter are:
+            - All: Generates a single CSV report file containing all successful and failed DMARC alignments for all domains.
+            - AllFailedAlignment: Generates a single CSV report file containing all failed DMARC alignments for all domains.
+            - PerDomain: Generates one CSV report file per domain containing all successful and failed DMARC alignments.
+            - AllSummary: Generates a single CSV report file that gives a high level summary of DMARC aligned emails vs DMARC not aligned emails on a per domain basis.
+        
+        The default vaule for this paramter is 'PerDomain' and multiple values can be specified.
+        
+    .PARAMETER ReportStyle
+        Specifies the style of report to generate and refers to the number of columns included in the report.
+        The acceptable values for this parameter are:
+            - Raw: All columns in the DMARC database are included in the report output. These columns contain data taken directly from the original XML reports and are used to construct the more human friendly columns included in the Compact report.
+            - Compact: Only includes the human friendly columns in the report output.
+
+        The default vaule for this paramter is 'Compact'.
+    
+    .PARAMETER StartDate
+        Specifies the start date and time of the date range.
+        It can take one of these forms:
+            - A System.DateTime object (e.g. (Get-Date).AddMonths(-5))
+            - A System.String object (e.g. '2024-05-10 20:00:00')
+        
+        The default vaule for this paramter is 3 months ago.
+         
+    .PARAMETER DomainFilter
+        Specifies a file filter to apply when determining which domains to include in the report.
+        When using this parameter, ensure it starts and ends with the '*' wildcard character.
+        i.e. '*primarydomain*' or '*domain*'
+
+        The default value for this paramter is '*' (i.e. all files).
+
+    .EXAMPLE
+        Start-DmarcRuaReport
+
+        Generates DMARC RUA reports using the default parameter values.
+
+    .EXAMPLE
+        Start-DmarcRuaReport `
+        -ReportType  PerDomain, AllSummary `
+        -StartDate   (Get-Date).AddMonths(-6)
+
+        Generates 2 sets of DMARC RUA reports: 1 using the 'PerDomain' type and 1 using the 'AllSummary' type.
+        These reports include all data collected over the last 6 months.
+
+    .EXAMPLE
+        Start-DmarcRuaReport `
+        -ReportType   AllSummary `
+        -StartDate    '2024-05-01' `
+        -DomainFilter *primary*
+
+        Generates an 'AllSummary' report including all data collected since 2024-05-01 that were for domains that contain the word 'primary'.
+#>
 Function Start-DmarcRuaReport {
     [CmdletBinding()]
     Param (
@@ -104,14 +170,14 @@ Function Start-DmarcRuaReport {
             }
         }
 
-        switch -Wildcard ($ReportType) {
-            #Complete export of the database into a single .csv file.
+        switch ($ReportType) {
+            #Complete export of the DMARC database into a single .csv file.
             'All' {
                 $exportPath = "$($drrConfigData.ReportOutputDirectory)\DMARC Report - All.csv"
                 $dmarcReportData | Select-Object @selectObjectParams | Export-Csv -LiteralPath $exportPath -Append -NoTypeInformation
             }
 
-            #Complete export of all reported failed alignments in the database into a single .csv file.
+            #Complete export of all reported failed alignments in the DMARC database into a single .csv file.
             'AllFailedAlignment' {
                 $exportPath = "$($drrConfigData.ReportOutputDirectory)\DMARC Report - All Failed Alignment.csv"
                 $dmarcReportData | Select-Object @selectObjectParams | Where-Object {$_.'DMARC Alignment' -like 'Fail*'} |
@@ -127,7 +193,7 @@ Function Start-DmarcRuaReport {
                 }
             }
 
-            '*Summary' {
+            'AllSummary' {
                 $dmarcReportData | Select-Object -Property @(
                     @{Label = 'DateMonth';       Expression = {$_.'Date Begin'.ToString('yyyy-MM')}},
                     @{Label = 'DateYear';        Expression = {$_.'Date Begin'.ToString('yyyy')}},
@@ -140,7 +206,7 @@ Function Start-DmarcRuaReport {
         $writeProgressCounter++
     }
 
-    if ($ReportType -like '*Summary') {
+    if ($ReportType -eq 'AllSummary') {
         $dmarcReportDomains = @($summaryData | Group-Object -Property 'Domain')
         $domainSummaries = New-Object -TypeName System.Collections.ArrayList
         foreach ($dmarcReportDomain in $dmarcReportDomains) {
