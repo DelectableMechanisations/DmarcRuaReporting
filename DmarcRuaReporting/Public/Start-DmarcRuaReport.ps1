@@ -17,9 +17,9 @@
             - AllFailedAlignment: Generates a single CSV report file containing all failed DMARC alignments for all domains.
             - PerDomain: Generates one CSV report file per domain containing all successful and failed DMARC alignments.
             - AllSummary: Generates a single CSV report file that gives a high level summary of DMARC aligned emails vs DMARC not aligned emails on a per domain basis.
-        
+
         The default vaule for this paramter is 'PerDomain' and multiple values can be specified.
-        
+
     .PARAMETER ReportStyle
         Specifies the style of report to generate and refers to the number of columns included in the report.
         The acceptable values for this parameter are:
@@ -27,15 +27,15 @@
             - Compact: Only includes the human friendly columns in the report output.
 
         The default vaule for this paramter is 'Compact'.
-    
+
     .PARAMETER StartDate
         Specifies the start date and time of the date range.
         It can take one of these forms:
             - A System.DateTime object (e.g. (Get-Date).AddMonths(-5))
             - A System.String object (e.g. '2024-05-10 20:00:00')
-        
+
         The default vaule for this paramter is 3 months ago.
-         
+
     .PARAMETER DomainFilter
         Specifies a file filter to apply when determining which domains to include in the report.
         When using this parameter, ensure it starts and ends with the '*' wildcard character.

@@ -6,7 +6,7 @@
 Function Remove-EmptyDirectory {
     [CmdletBinding()]
     Param (
-        [ValidateScript({ Test-Path -LiteralPath $_ -PathType Container })]
+        [ValidateScript({Test-Path -LiteralPath $_ -PathType Container})]
         [System.String]
         $LiteralPath,
 
