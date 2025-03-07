@@ -9,3 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add cmdlet help for Start-DmarcRuaMailboxScrape.
 - Add cmdlet help for Start-DmarcRuaReport
+
+### Changed
+ - Add support for UNC database paths
+ - Update markdown documentation
+
+### Fixed
+ - Fix encoding issue for Get-DmarcRuaMailboxScrapeSource.ps1
+ - Remove trailing whitespace characters
+ - Bugfix Resolve-IpToPtr function
