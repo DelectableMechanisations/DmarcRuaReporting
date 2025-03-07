@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
         Gets a list of mailboxes and determines if they could be used as a scrape source.
 
