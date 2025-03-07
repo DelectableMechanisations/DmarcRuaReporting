@@ -31,21 +31,6 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DomainFilter
-{{ Fill DomainFilter Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Path
 {{ Fill Path Description }}
 
@@ -55,23 +40,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ReportStyle
-{{ Fill ReportStyle Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: Raw, Compact
-
-Required: False
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -84,10 +53,24 @@ Accept wildcard characters: False
 Type: String[]
 Parameter Sets: (All)
 Aliases:
-Accepted values: All, AllFailedAlignment, PerDomain, AllSummary
 
 Required: False
-Position: 1
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReportStyle
+{{ Fill ReportStyle Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -102,7 +85,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DomainFilter
+{{ Fill DomainFilter Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
