@@ -58,7 +58,7 @@
     .EXAMPLE
         Get-DmarcRuaReportDatabase -Path 'C:\Temp\DmarcRuaReportDatabase' -PathFormat DevicePath
 
-        Gets the details of the DMARC RUA Report Database in the path 'C:\Temp\DmarcRuaReportDatabase' , and returns the file and directory paths as device paths.
+        Gets the details of the DMARC RUA Report Database in the path 'C:\Temp\DmarcRuaReportDatabase', and returns the file and directory paths as device paths.
 
         ApplicationExecutable_7zip : C:\Program Files\7-Zip\7z.exe
         DmarcReportDatabaseFiles   : \\?\C:\Temp\DmarcRuaReportDatabase\Databases\DMARCReportDatabase
@@ -73,6 +73,25 @@
         ReportOutputDirectory      : \\?\C:\Temp\DmarcRuaReportDatabase\Reports
         UnprocessedRawAttachment   : \\?\C:\Temp\DmarcRuaReportDatabase\Databases\UnprocessedRawAttachment
         UnprocessedXmlRuaReport    : \\?\C:\Temp\DmarcRuaReportDatabase\Databases\UnprocessedXmlRuaReport
+
+    .EXAMPLE
+        Get-DmarcRuaReportDatabase -Path '\\SERVER01\Shares\DmarcRuaReportDatabase' -PathFormat DevicePath
+
+        Gets the details of the DMARC RUA Report Database in the path '\\SERVER01\Shares\DmarcRuaReportDatabase', and returns the file and directory paths as UNC based device paths.
+
+        ApplicationExecutable_7zip : C:\Program Files\7-Zip\7z.exe
+        DmarcReportDatabaseFiles   : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\DMARCReportDatabase
+        ImportErrorDirectory       : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\zz-ImportError
+        ImportSourceDirectory      : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\ImportData
+        IpToServerNameDB           : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\IP-to-ServerName-DB.xml
+        OutlookMailboxesToScrape   : {itex-rua@ccc.govt.nz}
+        ProcessedRawAttachment     : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\ProcessedRawAttachment
+        ProcessedRawAttachmentDB   : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\ProcessedRawAttachment-DB.xml
+        ProcessedXmlRuaReport      : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\ProcessedXmlRuaReport
+        ProcessedXmlRuaReportDB    : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\ProcessedXmlRuaReport-DB.xml
+        ReportOutputDirectory      : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Reports
+        UnprocessedRawAttachment   : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\UnprocessedRawAttachment
+        UnprocessedXmlRuaReport    : \\?\UNC\SERVER01\Shares\DmarcRuaReportDatabase\Databases\UnprocessedXmlRuaReport
 #>
 Function Get-DmarcRuaReportDatabase {
     [CmdletBinding()]
@@ -111,7 +130,17 @@ Function Get-DmarcRuaReportDatabase {
                 'AbsolutePath' {$drrConfigItemValue = $absolutePath}
 
                 #Device paths aren't subject to the 255 character path limits (e.g. \\?\C:\Temp\DmarcRuaReportDatabase)
-                'DevicePath'   {$drrConfigItemValue = "\\?\$absolutePath"}
+                'DevicePath'   {
+
+                    #If it's a UNC based device path (e.g. \\?\UNC\SERVER01.example.com\DmarcRuaReportDatabase)
+                    if ($absolutePath.StartsWith('\\')) {
+                        $drrConfigItemValue = "\\?\UNC$($absolutePath.Substring(1))"
+
+                    #If it's a local device path (e.g. \\?\C:\Temp\DmarcRuaReportDatabase)
+                    } else {
+                        $drrConfigItemValue = "\\?\$absolutePath"
+                    }
+                }
 
                 #Relative paths are relative to the current location in the file system (e.g. .\DmarcRuaReportDatabase)
                 'RelativePath' {$drrConfigItemValue = $drrConfigItemValue}
