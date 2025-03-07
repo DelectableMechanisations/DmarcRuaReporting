@@ -6,8 +6,15 @@ Function Resolve-IpToPtr {
     )
 
     Write-Debug -Message "Processing IP '$IPAddress'"
+    $resolvedToPtr = $true
     try {
-        $ptrs = @(Resolve-DnsName -Name $IPAddress -Type PTR -ErrorAction Stop -Verbose:$false | Select-Object -ExpandProperty NameHost)
+        $ptrs = @(
+            Resolve-DnsName `
+            -Name $IPAddress `
+            -Type 'PTR' `
+            -ErrorAction 'Stop' `
+            -Verbose:$false | Select-Object -ExpandProperty 'NameHost' -ErrorAction 'Stop'
+        )
         Write-Debug -Message "  Resolved to $($ptrs.Count) PTR record(s)."
 
         #If the IP address resolves to a single PTR record then use this.
@@ -33,7 +40,6 @@ Function Resolve-IpToPtr {
                 $ptr = ([String]$nonArpa) -Replace ' ', ','
             }
         }
-        $resolvedToPtr = $true
 
     } catch {
         Write-Debug -Message "  Failed to resolve to a PTR record."
@@ -43,7 +49,7 @@ Function Resolve-IpToPtr {
 
     [PSCustomObject]@{
         IPAddress     = $IPAddress
-        ResolvedToPtr = $resolvedToPtr = $true
+        ResolvedToPtr = $resolvedToPtr
         ResolvedPtr   = $ptr
     } | Write-Output
 }
